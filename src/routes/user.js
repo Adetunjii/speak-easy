@@ -64,4 +64,13 @@ router.patch("/update", auth, async (req, res) => {
   }
 });
 
+router.delete("/delete", auth, async (req, res) => {
+  try {
+    await req.user.remove();
+    res.send("Removed successfully");
+  } catch (error) {
+    res.status(400).send("User doesn't exist");
+  }
+});
+
 module.exports = router;
