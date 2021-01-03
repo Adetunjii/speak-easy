@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 
 const router = Router();
 
-router.post("/login", async (req, res) => {
+router.post("users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -16,11 +16,11 @@ router.post("/login", async (req, res) => {
     const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send("user doesn't exist");
   }
 });
 
-router.post("/signup", async (req, res) => {
+router.post("users/signup", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.patch("/update", auth, async (req, res) => {
+router.patch("users/update", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "firstName",
@@ -64,7 +64,7 @@ router.patch("/update", auth, async (req, res) => {
   }
 });
 
-router.delete("/delete", auth, async (req, res) => {
+router.delete("users/delete", auth, async (req, res) => {
   try {
     await req.user.remove();
     res.send("Removed successfully");
