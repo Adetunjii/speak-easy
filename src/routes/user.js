@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 
 const router = Router();
 
-router.post("users/login", async (req, res) => {
+router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -20,7 +20,7 @@ router.post("users/login", async (req, res) => {
   }
 });
 
-router.post("users/signup", async (req, res) => {
+router.post("/users/signup", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
@@ -31,7 +31,7 @@ router.post("users/signup", async (req, res) => {
   }
 });
 
-router.patch("users/update", auth, async (req, res) => {
+router.patch("/users/update", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "firstName",
