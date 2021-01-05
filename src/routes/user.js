@@ -31,6 +31,18 @@ router.post("/users/signup", async (req, res) => {
   }
 });
 
+router.get("/users/getAllUsers", async (req, res) => {
+  try {
+    const user = await User.find({});
+    if (!user) {
+      res.status(404).send({ status: "No users found" });
+    }
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 router.patch("/users/update", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
