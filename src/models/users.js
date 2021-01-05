@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
     },
   },
   phoneNo: { type: String, required: true, unique: true },
+  imageURL: {
+    type: String,
+    default:
+      "https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light",
+  },
   tokens: [
     {
       token: {
