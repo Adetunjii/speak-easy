@@ -21,13 +21,18 @@ const io = socketio(server);
 //routes
 app.use("/api", userRouter);
 
+io.origins(["http://localhost:3000"]);
+//create a socket connection
 io.on("connect", (socket) => {
+  //listen for a join event from the client
   socket.on("join", ({ username, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, username, room });
     if (error) return callback(error);
 
+    //allow user to join room
     socket.join(user.room);
 
+    //sends a message to every one saying the user just joined
     socket.emit("message", {
       user: "Admin",
       text: `${user.name}, Just joined`,
@@ -36,6 +41,7 @@ io.on("connect", (socket) => {
       .to(user.room)
       .emit("message", { user: "Admin", text: `${user.name} has joined!!` });
 
+    //get users in a room
     io.to(user.room).emit("roomData", {
       room: user.room,
       users: getUsersInRoom(user.room),
@@ -43,6 +49,7 @@ io.on("connect", (socket) => {
     callback();
   });
 
+  //listens to the sendMessage event from the client and emits the message too all participants in the chat room
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
     io.to(user.room).emit("message", { user: user.name, text: message });
