@@ -26,6 +26,7 @@ app.use(router);
 
 io.origins(["*:*"]);
 io.on("connect", (socket) => {
+  console.log("got here");
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
 
