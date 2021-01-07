@@ -20,5 +20,7 @@
     "mongoose": "^5.11.8",
     "socket.io": "^2.3.0",
     "validator": "^13.5.2"
-  }
+  },
+  "engines": { "node" : "12.16.1" }
+
 }
