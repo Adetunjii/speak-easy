@@ -21,7 +21,6 @@ const io = socketio(server);
 //routes
 app.use("/api", userRouter);
 
-io.origins(["http://localhost:3000"]);
 //create a socket connection
 io.on("connect", (socket) => {
   //listen for a join event from the client
