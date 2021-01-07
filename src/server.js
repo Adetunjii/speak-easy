@@ -24,7 +24,7 @@ app.use(cors());
 app.use("/api", userRouter);
 app.use(router);
 
-io.origins(["*:*"]);
+io.origins(["http://localhost:3000/"]);
 io.on("connect", (socket) => {
   console.log("got here");
   socket.on("join", ({ name, room }, callback) => {
