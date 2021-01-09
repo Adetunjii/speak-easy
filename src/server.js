@@ -53,7 +53,7 @@ io.on("connect", (socket) => {
 
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
-
+    console.log(user);
     io.to(user.room).emit("message", { user: user.name, text: message });
 
     callback();
