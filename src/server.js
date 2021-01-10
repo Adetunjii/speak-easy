@@ -40,6 +40,12 @@ io.on("connect", (socket) => {
       text: `${user.name}, welcome to room ${user.room}.`,
     });
 
+    console.log("userData is:", {
+      id: socket.id,
+      user: user.name,
+      room: user.room,
+    });
+
     socket.emit("userData", {
       id: socket.id,
       name: user.name,
@@ -54,7 +60,7 @@ io.on("connect", (socket) => {
       users: getUsersInRoom(user.room),
     });
 
-    callback();
+    // callback();
   });
 
   socket.on("sendMessage", ({ userData, message }, callback) => {
