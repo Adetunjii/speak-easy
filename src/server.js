@@ -74,6 +74,7 @@ io.on("connect", (socket) => {
         io.to(userData.room).emit("message", {
           user: userData.name,
           text: message,
+          userData: userData,
         });
         callback();
       } else {
