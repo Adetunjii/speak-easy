@@ -56,6 +56,8 @@ io.on("connect", (socket) => {
     const user = getUser(socket.id);
     console.log("user ==>", user);
     console.log(message);
+    const allUsers = getUsersInRoom(user.room);
+    console.log("all users: ", allUsers);
     try {
       if (user) {
         io.to(user.room).emit("message", {

@@ -4,6 +4,8 @@ const addUser = ({ id, name, room }) => {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
+  console.log(name, room);
+
   const existingUser = users.find(
     (user) => user.room === room && user.name === name
   );
@@ -24,7 +26,17 @@ const removeUser = (id) => {
   if (index !== -1) return users.splice(index, 1)[0];
 };
 
-const getUser = (id) => users.find((user) => user.id === id);
+const getUser = (id) => {
+  const user = users.find((user) => user.id === id);
+
+  if (!user) {
+    console.log("user could not be found");
+    return;
+  }
+
+  console.log("yaay user found: ", user.name, user.room);
+  return user;
+};
 
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
