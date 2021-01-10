@@ -52,6 +52,7 @@ io.on("connect", (socket) => {
   });
 
   socket.on("sendMessage", (message, callback) => {
+    console.log(socket.id);
     const user = getUser(socket.id);
     console.log("user ==>", user);
     console.log(message);
