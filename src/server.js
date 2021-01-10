@@ -39,6 +39,12 @@ io.on("connect", (socket) => {
       user: "admin",
       text: `${user.name}, welcome to room ${user.room}.`,
     });
+
+    socket.emit("userData", {
+      id: socket.id,
+      name: user.name,
+      room: user.room,
+    });
     socket.broadcast
       .to(user.room)
       .emit("message", { user: "admin", text: `${user.name} has joined!` });
@@ -51,18 +57,17 @@ io.on("connect", (socket) => {
     callback();
   });
 
-  socket.on("sendMessage", (message, callback) => {
+  socket.on("sendMessage", ({ userData, message }, callback) => {
     console.log(socket.id);
-    const user = getUser(socket.id);
-    console.log("user ==>", user);
+    console.log("user ==>", userData);
     console.log(message);
-    const allUsers = getUsersInRoom(user.room);
+    const allUsers = getUsersInRoom(userData.room);
     console.log("all users: ", allUsers);
     try {
-      if (user) {
-        io.to(user.room).emit("message", {
-          user: user.name,
-          text: message.message,
+      if (userData) {
+        io.to(userData.room).emit("message", {
+          user: userData.name,
+          text: message,
         });
         callback();
       } else {
