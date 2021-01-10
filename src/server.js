@@ -53,14 +53,18 @@ io.on("connect", (socket) => {
 
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
-    console.log(user);
+    console.log("user ==>", user);
     console.log(message);
     try {
-      io.to(user.room).emit("message", {
-        user: user.name,
-        text: message.message,
-      });
-      callback();
+      if (user) {
+        io.to(user.room).emit("message", {
+          user: user.name,
+          text: message.message,
+        });
+        callback();
+      } else {
+        console.log("no user here");
+      }
     } catch (error) {
       console.log("sendmessageError", error);
     }
