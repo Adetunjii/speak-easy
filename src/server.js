@@ -29,7 +29,7 @@ app.use(router);
 
 io.origins(["*:*"]);
 io.on("connect", (socket) => {
-  socket.emit("waitingList", {
+  io.emit("waitingList", {
     rooms: getAllAvailableRooms(),
   });
 
