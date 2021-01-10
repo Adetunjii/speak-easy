@@ -54,12 +54,16 @@ io.on("connect", (socket) => {
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
     console.log(user);
-    io.to(user.room).emit("message", {
-      user: user.name,
-      text: message.message,
-    });
-
-    callback();
+    console.log(message);
+    try {
+      io.to(user.room).emit("message", {
+        user: user.name,
+        text: message.message,
+      });
+      callback();
+    } catch (error) {
+      console.log("sendmessageError", error);
+    }
   });
 
   socket.on("disconnect", () => {
