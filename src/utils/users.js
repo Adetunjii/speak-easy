@@ -1,4 +1,5 @@
 const users = [];
+const availableRooms = [];
 
 const addUser = ({ id, name, room }) => {
   name = name.trim().toLowerCase();
@@ -10,11 +11,20 @@ const addUser = ({ id, name, room }) => {
     (user) => user.room === room && user.name === name
   );
 
+  const existingRooms = users.filter((user) => user.room == room);
+
+  //checks the amount of users in a room
+
+  if (existingRooms.length == 2)
+    return { error: "Cannot have more than two users in a room" };
   if (!name || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "Username is taken." };
 
+  availableRooms.push(room);
+
   const user = { id, name, room };
   console.log("user is: ", user);
+
   users.push(user);
 
   return { user };
@@ -38,6 +48,18 @@ const getUser = (id) => {
   return user;
 };
 
+const addRoom = (room) => availableRooms.concat(room);
+const removeRoom = (room) =>
+  availableRooms.filter((availableRoom) => availableRoom !== room);
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
+const getAllAvailableRooms = () => Array.from(new Set(availableRooms));
 
-module.exports = { addUser, removeUser, getUser, getUsersInRoom };
+module.exports = {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+  addRoom,
+  removeRoom,
+  getAllAvailableRooms,
+};

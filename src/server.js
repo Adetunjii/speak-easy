@@ -11,6 +11,9 @@ const {
   removeUser,
   getUser,
   getUsersInRoom,
+  addRoom,
+  getAllAvailableRooms,
+  removeRoom,
 } = require("./utils/users");
 
 const router = require("./router");
@@ -34,7 +37,10 @@ io.on("connect", (socket) => {
 
     socket.join(user.room);
 
-    console.log(`${user.name} joined ${user.room}`);
+    socket.emit("waitingList", {
+      rooms: getAllAvailableRooms(),
+    });
+
     socket.emit("message", {
       user: "admin",
       text: `${user.name}, welcome to room ${user.room}.`,
