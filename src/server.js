@@ -29,6 +29,10 @@ app.use(router);
 
 io.origins(["*:*"]);
 io.on("connect", (socket) => {
+  socket.emit("waitingList", {
+    rooms: getAllAvailableRooms(),
+  });
+
   console.log("got here");
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
@@ -36,10 +40,6 @@ io.on("connect", (socket) => {
     if (error) return callback(error);
 
     socket.join(user.room);
-
-    socket.emit("waitingList", {
-      rooms: getAllAvailableRooms(),
-    });
 
     socket.emit("message", {
       user: "admin",
