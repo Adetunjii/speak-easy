@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 
 const router = Router();
 
-router.post("/users/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -20,7 +20,7 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-router.post("/users/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
@@ -31,19 +31,19 @@ router.post("/users/signup", async (req, res) => {
   }
 });
 
-router.get("/users/getAllUsers", async (req, res) => {
+router.get("/getAllUsers", async (req, res) => {
   try {
-    const user = await User.find({});
-    if (!user) {
+    const users = await User.find({});
+    if (!users) {
       res.status(404).send({ status: "No users found" });
     }
-    res.status(200).send(user);
+    res.status(200).send(users);
   } catch (error) {
     res.status(500).send();
   }
 });
 
-router.patch("/users/update", auth, async (req, res) => {
+router.patch("/update", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "firstName",
@@ -76,7 +76,7 @@ router.patch("/users/update", auth, async (req, res) => {
   }
 });
 
-router.delete("users/delete", auth, async (req, res) => {
+router.delete("/delete", auth, async (req, res) => {
   try {
     await req.user.remove();
     res.send("Removed successfully");

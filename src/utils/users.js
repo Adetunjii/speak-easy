@@ -15,12 +15,15 @@ const addUser = ({ id, name, room }) => {
 
   //checks the amount of users in a room
 
-  if (existingRooms.length == 2)
+  if (existingRooms.length == 2) {
+    let index = availableRooms.findIndex(
+      (availableRoom) => availableRoom === room
+    );
+    availableRooms.splice();
     return { error: "Cannot have more than two users in a room" };
+  }
   if (!name || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "Username is taken." };
-
-  availableRooms.push(room);
 
   const user = { id, name, room };
   console.log("user is: ", user);

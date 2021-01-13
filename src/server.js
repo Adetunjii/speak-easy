@@ -4,7 +4,7 @@ const socketio = require("socket.io");
 const mongoose = require("./db/mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-const { userRouter } = require("./routes");
+const { userRouter, bookingRouter } = require("./routes");
 
 const {
   addUser,
@@ -24,7 +24,8 @@ const io = socketio(server);
 
 app.use(express.json());
 app.use(cors());
-app.use("/api", userRouter);
+app.use("/api/users", userRouter);
+app.use("/api/booking", bookingRouter);
 app.use(router);
 
 io.origins(["*:*"]);
@@ -75,20 +76,13 @@ io.on("connect", (socket) => {
     console.log(message);
     const allUsers = getUsersInRoom(userData.room);
     console.log("all users: ", allUsers);
-    try {
-      if (userData) {
-        io.to(userData.room).emit("message", {
-          user: userData.name,
-          text: message,
-          userData: userData,
-        });
-        callback();
-      } else {
-        console.log("no user here");
-      }
-    } catch (error) {
-      console.log("sendmessageError", error);
-    }
+
+    io.to(userData.room).emit("message", {
+      user: userData.name,
+      text: message,
+      userData: userData,
+    });
+    callback();
   });
 
   socket.on("disconnect", () => {

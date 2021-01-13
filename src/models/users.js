@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
+    validate(value) {
+      if (validator.isEmpty(value)) {
+        throw new Error("Field cannot be empty");
+      }
+    },
   },
   password: { type: String, required: true },
   email: {
@@ -27,7 +32,16 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
-  phoneNo: { type: String, required: true, unique: true },
+  phoneNo: {
+    type: String,
+    required: true,
+    unique: true,
+    validate(value) {
+      if (validator.isEmpty(value)) {
+        throw new Error("Field cannot be empty");
+      }
+    },
+  },
   imageURL: {
     type: String,
     default:
