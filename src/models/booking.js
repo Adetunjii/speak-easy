@@ -25,8 +25,18 @@ const bookingSchema = new mongoose.Schema({
     },
   },
   amount: { type: Number, required: true },
-  status: { type: String, enum: ["pending", "booked", "completed"] },
+  status: {
+    type: String,
+    enum: ["pending", "booked", "completed"],
+    required: true,
+  },
   date: { type: Date, default: new Date().toJSON() },
+  paymentReference: { type: String, required: true },
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid", "refunded", "cancelled"],
+    required: true,
+  },
 });
 
 bookingSchema.statics.findUserById = async (userId) => {
