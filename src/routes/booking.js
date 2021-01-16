@@ -15,9 +15,7 @@ router.post("/createBooking", auth, async (req, res) => {
     await booking.save();
     res.status(201).send("Booking created successfully");
   } catch (error) {
-    const errorMessages = [];
-    for (field in error.errors) errorMessages.push(error.errors[field].message);
-    res.status(400).send(errorMessages);
+    res.status(400).send(error);
   }
 });
 
