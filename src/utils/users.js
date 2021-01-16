@@ -1,5 +1,33 @@
+const Room = require("../models/room");
+const User = require("../models/users");
+const { createRoom } = require("./rooms");
+
 const users = [];
 const availableRooms = [];
+
+const addUserToRoom = async ({ roomId, userId }) => {
+  const room = await Room.findById(roomId);
+  if (!room) {
+    return { error: "Room cannot be found" };
+  }
+  let users = room.users;
+
+  if (users.length == 2) {
+    room.isAvailable = false;
+    await room.save();
+  }
+
+  if (room.isAvailable) {
+    users = users.concat(userId);
+    let userSet = new Set(users);
+    users = Array.from(userSet);
+    console.log(users);
+    room.users = users;
+    console.log(room);
+    const isExists = users.find();
+    await room.save();
+  }
+};
 
 const addUser = ({ id, name, room }) => {
   name = name.trim().toLowerCase();
@@ -46,8 +74,6 @@ const getUser = (id) => {
     console.log("user could not be found");
     return;
   }
-
-  console.log("yaay user found: ", user.name, user.room);
   return user;
 };
 
@@ -65,4 +91,5 @@ module.exports = {
   addRoom,
   removeRoom,
   getAllAvailableRooms,
+  addUserToRoom,
 };

@@ -4,19 +4,21 @@ const socketio = require("socket.io");
 const mongoose = require("./db/mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-const { userRouter, bookingRouter } = require("./routes");
+const { userRouter, bookingRouter, roomRouter } = require("./routes");
 
 const {
   addUser,
   removeUser,
   getUser,
   getUsersInRoom,
+  addUserToRoom,
   addRoom,
   getAllAvailableRooms,
   removeRoom,
 } = require("./utils/users");
 
 const router = require("./router");
+const Room = require("./models/room");
 
 const app = express();
 const server = http.createServer(app);
@@ -26,6 +28,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api/users", userRouter);
 app.use("/api/booking", bookingRouter);
+app.use("/api/room", roomRouter);
 app.use(router);
 
 io.origins(["*:*"]);
@@ -103,3 +106,8 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
+
+// addUserToRoom({
+//   roomId: "6002d8c3955a2830a168d9cf",
+//   userId: "5ff46dbf9f78783948965f79",
+// });
