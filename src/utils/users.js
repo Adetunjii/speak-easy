@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Room = require("../models/room");
 const User = require("../models/users");
 const { createRoom } = require("./rooms");
+const Group = require("../models/group");
 
 const users = [];
 const availableRooms = [];
@@ -25,6 +26,27 @@ const addUserToRoom = async ({ roomId, userId }) => {
 
   room.isAvailable = false;
   await room.save();
+  return userId;
+};
+
+const addUserToGroup = async ({ groupId, userId }) => {
+  const group = await Group.findById(roomId);
+  console.log(group);
+  if (!group) {
+    return { error: "Group cannot be found" };
+  }
+
+  const groupMembers = group.members;
+
+  const existingMember = groupMembers.find(
+    (member) => member.toString() === userId
+  );
+  if (existingMember) {
+    return { error: "Already a member of the group" };
+  }
+
+  groupMembers.push(userId);
+  await group.save();
   return userId;
 };
 
@@ -94,4 +116,5 @@ module.exports = {
   removeRoom,
   getAllAvailableRooms,
   addUserToRoom,
+  addUserToGroup,
 };

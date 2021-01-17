@@ -5,15 +5,15 @@ const { ErrorHandler } = require("../helpers/errors");
 
 const router = Router();
 
-router.post("/createRoom", auth, async (req, res, next) => {
+router.post("/createRoom", auth, async (req, res) => {
   try {
     const newRoom = new Room(req.body);
-    await newRoom.save();
+    console.log(newRoom);
+    const room = await newRoom.save();
+    console.log(room);
     res.status(201).send("Successfully created room");
-    next();
   } catch (error) {
-    error.statusCode = 400;
-    next(error);
+    res.status(400).send(error);
   }
 });
 

@@ -18,10 +18,7 @@ const roomSchema = new mongoose.Schema(
     users: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: "User",
-        unique: true,
-        trim: true,
       },
     ],
     isAvailable: { type: Boolean, default: true, required: true },

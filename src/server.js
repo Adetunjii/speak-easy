@@ -16,6 +16,7 @@ const {
   getUser,
   getUsersInRoom,
   addUserToRoom,
+  addUserToGroup,
   addRoom,
   getAllAvailableRooms,
   removeRoom,
@@ -67,7 +68,24 @@ io.on("connect", (socket) => {
     });
   });
 
-  socket.on("joinGroup", ({ groupId, userId }, callback) => {});
+  socket.on("joinGroup", ({ groupId, userId }, callback) => {
+    const { error, user } = addUserToGroup({ groupId, userId });
+
+    console.log("error is:", error);
+    console.log("user is: ", user);
+
+    if (error) return callback(error);
+    const currentUser = User.findById(user);
+    if (!currentUser) {
+      return callback("User doesn't exist");
+    }
+    socket.join(groupId);
+
+    socket.broadcast.to(roomId).emit("message", {
+      user: "admin",
+      text: `${currentUser.username} has joined!`,
+    });
+  });
 
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
