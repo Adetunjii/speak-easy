@@ -2,10 +2,21 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
+const { ErrorHandler } = require("../helpers/errors");
 const dotenv = require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true, trim: true, lowercase: true },
+  firstName: {
+    type: String,
+    required: [true, "First Name is required"],
+    trim: true,
+    lowercase: true,
+    validate(value) {
+      if (validator.isEmpty(value)) {
+        throw new ErrorHandler(400, "First name field cannot be empty");
+      }
+    },
+  },
   lastName: { type: String, required: true, trim: true, lowercase: true },
   username: {
     type: String,
@@ -83,11 +94,11 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error("Email doesn't exist");
+    throw new ErrorHandler(404, "Email doesn't exist");
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error("Invalid Password");
+    throw new ErrorHandler(404, "Invalid Password");
   }
 
   return user;

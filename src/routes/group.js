@@ -1,24 +1,28 @@
 const { Router } = require("express");
-const Group = require("../utils/group");
+const Group = require("../models/group");
 const router = Router();
 const auth = require("../middleware/auth");
+const { ErrorHandler } = require("../helpers/errors");
 
-router.post("/createGroup", auth, async (req, res) => {
+router.post("/createGroup", auth, async (req, res, next) => {
   try {
     const group = new Group(req.body);
     await group.save();
     res.status(201).send(group);
+    next();
   } catch (error) {
-    res.status(400).send();
+    error.statusCode = 400;
+    next(error);
   }
 });
 
-router.get("/getAllGroups", auth, async (req, res) => {
+router.get("/getAllGroups", auth, async (req, res, next) => {
   try {
-    const groups = await Group.find({});
+    const groups = await Group.find({}).populate("users");
     res.status(200).send(groups);
+    next();
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 });
 
@@ -28,12 +32,12 @@ router.delete("/deleteGroup/:id", auth, async (req, res) => {
     const group = await Group.findByIdAndDelete(groupId);
 
     if (!group) {
-      return res.status(404).send({ error: "Group doesn't exist" });
+      throw new ErrorHandler(404, "Group doesn't exist");
     }
 
     res.status(200).send(group);
   } catch (error) {
-    res.status(500).send({ error: "A server error occured" });
+    next(error);
   }
 });
 

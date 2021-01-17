@@ -1,49 +1,51 @@
 const User = require("../models/users");
 const { Router } = require("express");
 const auth = require("../middleware/auth");
+const { ErrorHandler } = require("../helpers/errors");
 
 const router = Router();
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
     if (!user) {
-      res.status(404).send();
+      throw new ErrorHandler(404, "User not found");
     }
     const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
+    next();
   } catch (error) {
-    res.status(400).send("user doesn't exist");
+    next(error);
   }
 });
 
-router.post("/signup", async (req, res) => {
-  const user = new User(req.body);
+router.post("/signup", async (req, res, next) => {
   try {
+    const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
+    next();
   } catch (error) {
-    res.status(400).send(error);
+    error.statusCode = 400;
+    next(error);
   }
 });
 
-router.get("/getAllUsers", async (req, res) => {
+router.get("/getAllUsers", async (req, res, next) => {
   try {
     const users = await User.find({});
-    if (!users) {
-      res.status(404).send({ status: "No users found" });
-    }
     res.status(200).send(users);
+    next();
   } catch (error) {
-    res.status(500).send();
+    next(error);
   }
 });
 
-router.patch("/update", auth, async (req, res) => {
+router.patch("/update", auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "firstName",
@@ -57,31 +59,34 @@ router.patch("/update", auth, async (req, res) => {
     return allowedUpdates.includes(update);
   });
 
-  if (!isValidOperation) {
-    return res.status(400).send({ error: "invalid updates" });
-  }
-
   try {
+    if (!isValidOperation) {
+      throw new ErrorHandler(400, "invalid update");
+    }
+
     const user = req.user;
     updates.forEach((update) => (user[update] = req.body[update]));
 
-    await user.save();
-
     if (!user) {
-      res.status(404).send();
+      throw new ErrorHandler(404, "user doesn't exist");
     }
+    await user.save();
     res.send(user);
+    next();
   } catch (error) {
-    res.send(500).send();
+    error.statusCode = 400;
+    next(error);
   }
 });
 
 router.delete("/delete", auth, async (req, res) => {
   try {
     await req.user.remove();
-    res.send("Removed successfully");
+    res.status(200).send("Removed successfully");
+    next();
   } catch (error) {
-    res.status(400).send("User doesn't exist");
+    error.statusCode = 400;
+    next(error);
   }
 });
 

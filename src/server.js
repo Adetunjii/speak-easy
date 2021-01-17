@@ -4,8 +4,12 @@ const socketio = require("socket.io");
 const mongoose = require("./db/mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-const { userRouter, bookingRouter, roomRouter, groupRouter } = require("./routes");
-
+const {
+  userRouter,
+  bookingRouter,
+  roomRouter,
+  groupRouter,
+} = require("./routes");
 const {
   addUser,
   removeUser,
@@ -16,10 +20,10 @@ const {
   getAllAvailableRooms,
   removeRoom,
 } = require("./utils/users");
-
 const router = require("./router");
 const Room = require("./models/room");
 const User = require("./models/users");
+const { handleError } = require("./helpers/errors");
 
 const app = express();
 const server = http.createServer(app);
@@ -30,7 +34,10 @@ app.use(cors());
 app.use("/api/users", userRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/room", roomRouter);
-app.use("api/group", groupRouter);
+app.use("/api/group", groupRouter);
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
 app.use(router);
 
 io.origins(["*:*"]);
