@@ -4,7 +4,7 @@ const socketio = require("socket.io");
 const mongoose = require("./db/mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-const { userRouter, bookingRouter, roomRouter } = require("./routes");
+const { userRouter, bookingRouter, roomRouter, groupRouter } = require("./routes");
 
 const {
   addUser,
@@ -19,6 +19,7 @@ const {
 
 const router = require("./router");
 const Room = require("./models/room");
+const User = require("./models/users");
 
 const app = express();
 const server = http.createServer(app);
@@ -29,6 +30,7 @@ app.use(cors());
 app.use("/api/users", userRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/room", roomRouter);
+app.use("api/group", groupRouter);
 app.use(router);
 
 io.origins(["*:*"]);
@@ -38,6 +40,28 @@ io.on("connect", (socket) => {
   });
 
   console.log("got here");
+
+  socket.on("joinRoom", ({ roomId, userId }, callback) => {
+    const { error, user } = addUserToRoom({ roomId, userId });
+
+    console.log("error is:", error);
+    console.log("user is: ", user);
+
+    if (error) return callback(error);
+    const currentUser = User.findById(user);
+    if (!currentUser) {
+      return callback("User doesn't exist");
+    }
+    socket.join(roomId);
+
+    socket.broadcast.to(roomId).emit("message", {
+      user: "admin",
+      text: `${currentUser.username} has joined!`,
+    });
+  });
+
+  socket.on("joinGroup", ({ groupId, userId }, callback) => {});
+
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
 
@@ -108,6 +132,6 @@ const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
 
 // addUserToRoom({
-//   roomId: "6002d8c3955a2830a168d9cf",
+//   roomId: "60033cdb43a8231c6c1e737e",
 //   userId: "5ff46dbf9f78783948965f79",
 // });

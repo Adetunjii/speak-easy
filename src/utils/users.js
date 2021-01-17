@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Room = require("../models/room");
 const User = require("../models/users");
 const { createRoom } = require("./rooms");
@@ -7,26 +8,24 @@ const availableRooms = [];
 
 const addUserToRoom = async ({ roomId, userId }) => {
   const room = await Room.findById(roomId);
+  console.log(room);
   if (!room) {
     return { error: "Room cannot be found" };
   }
-  let users = room.users;
-
-  if (users.length == 2) {
-    room.isAvailable = false;
+  let roomUsers = room.users;
+  console.log(roomUsers);
+  if (roomUsers.length < 2) {
+    const isExist = roomUsers.find((elem) => elem.toString() === userId);
+    if (isExist) {
+      return { error: "user already exists" };
+    }
+    roomUsers.push(userId);
     await room.save();
   }
 
-  if (room.isAvailable) {
-    users = users.concat(userId);
-    let userSet = new Set(users);
-    users = Array.from(userSet);
-    console.log(users);
-    room.users = users;
-    console.log(room);
-    const isExists = users.find();
-    await room.save();
-  }
+  room.isAvailable = false;
+  await room.save();
+  return userId;
 };
 
 const addUser = ({ id, name, room }) => {
@@ -81,7 +80,10 @@ const addRoom = (room) => availableRooms.concat(room);
 const removeRoom = (room) =>
   availableRooms.filter((availableRoom) => availableRoom !== room);
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
-const getAllAvailableRooms = () => Array.from(new Set(availableRooms));
+const getAllAvailableRooms = async () => {
+  const availableRooms = await Room.find({ isAvailable: true });
+  return availableRooms;
+};
 
 module.exports = {
   addUser,
