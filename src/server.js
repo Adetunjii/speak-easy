@@ -132,7 +132,6 @@ io.on("connect", (socket) => {
     io.to(roomId).emit("message", {
       user: userId,
       text: message,
-      userData: userData,
     });
     callback();
   });
