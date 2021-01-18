@@ -94,6 +94,23 @@ router.get("/getAllGroups", auth, async (req, res, next) => {
   }
 });
 
+router.get("/getGroupById/:groupId", auth, async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      throw new ErrorHandler(404, "Group doesn't exist");
+    }
+
+    res
+      .status(200)
+      .send({ status: true, message: "successfully fetched..", data: group });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete("/deleteGroup/:id", auth, async (req, res) => {
   try {
     const groupId = req.params.id;
