@@ -61,7 +61,7 @@ io.on("connect", (socket) => {
       return;
     }
     socket.join(user.roomId);
-
+    console.log("user has joined");
     socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
