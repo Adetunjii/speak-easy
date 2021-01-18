@@ -128,7 +128,7 @@ io.on("connect", (socket) => {
     // callback();
   });
 
-  socket.on("sendMessage", ({ roomId, userId, message }, callback) => {
+  socket.on("sendMessageToRoom", ({ roomId, userId, message }, callback) => {
     io.to(roomId).emit("message", {
       user: userId,
       text: message,
