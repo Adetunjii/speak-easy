@@ -12,6 +12,7 @@ const addUserToRoom = async ({ roomId, userId }) => {
   const room = await Room.findById(roomId);
   console.log(room);
   if (!room) {
+    console.log("room cannot be found");
     return { error: "Room cannot be found" };
   }
   let roomUsers = room.users;
@@ -27,7 +28,7 @@ const addUserToRoom = async ({ roomId, userId }) => {
 
   room.isAvailable = false;
   await room.save();
-  return userId;
+  return { roomId, userId };
 };
 
 const addUserToGroup = async ({ groupId, userId }) => {

@@ -59,15 +59,15 @@ io.on("connect", (socket) => {
       console.log(error);
       return;
     }
-    const currentUser = await User.findById(user);
+    const currentUser = await User.findById(user.userId);
 
     if (!currentUser) {
       console.log("user doesn't exist");
       return;
     }
-    socket.join(roomId);
+    socket.join(user.roomId);
 
-    socket.broadcast.to(roomId).emit("message", {
+    socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
     });
