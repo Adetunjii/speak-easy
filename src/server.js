@@ -50,7 +50,9 @@ io.on("connect", (socket) => {
   console.log("got here");
 
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
-    const { error, user } = await addUserToRoom({ roomId, userId });
+    const user = addUserToRoom({ roomId, userId });
+
+    console.log(user);
 
     console.log("error is:", error);
     console.log("user is: ", user);
@@ -161,9 +163,9 @@ io.on("connect", (socket) => {
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
 
-const user = addUserToRoom({
-  roomId: "6004bdfb67e5e803394a1bc8",
-  userId: "60049ca79dc3525a289bc56a",
-});
+// const user = addUserToRoom({
+//   roomId: "6004bdfb67e5e803394a1bc8",
+//   userId: "60049ca79dc3525a289bc56a",
+// });
 
-user.then((res) => console.log(res));
+// user.then((res) => console.log(res));
