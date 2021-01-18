@@ -50,10 +50,10 @@ io.on("connect", (socket) => {
   console.log("got here");
 
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
-    const { error, user } = addUserToRoom({ roomId, userId });
+    const { error, currentUser } = addUserToRoom({ roomId, userId });
 
     console.log("error is:", error);
-    console.log("user is: ", user);
+    console.log("user is: ", currentUser);
 
     if (error) {
       console.log(error);
