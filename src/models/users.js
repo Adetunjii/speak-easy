@@ -58,6 +58,7 @@ const userSchema = new mongoose.Schema({
     default:
       "https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light",
   },
+  rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
   tokens: [
     {

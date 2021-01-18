@@ -55,11 +55,15 @@ io.on("connect", (socket) => {
     console.log("error is:", error);
     console.log("user is: ", user);
 
-    if (error) return callback(error);
+    if (error) {
+      console.log("an error occured");
+      return;
+    }
     const currentUser = await User.findById(user);
 
     if (!currentUser) {
-      return callback("User doesn't exist");
+      console.log("user doesn't exist");
+      return;
     }
     socket.join(roomId);
 

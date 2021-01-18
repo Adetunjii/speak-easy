@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Room = require("../models/room");
+const User = require("../models/users")
 const auth = require("../middleware/auth");
 const { ErrorHandler } = require("../helpers/errors");
 
