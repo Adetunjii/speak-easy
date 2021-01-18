@@ -26,7 +26,7 @@ const addUserToRoom = async ({ roomId, userId }) => {
 
     let user = { roomId, userId };
     console.log("user is: ", user);
-    return { roomId, userId };
+    return user;
   }
 
   room.isAvailable = false;

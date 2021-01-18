@@ -50,29 +50,21 @@ io.on("connect", (socket) => {
   console.log("got here");
 
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
-    const user = addUserToRoom({ roomId, userId });
+    const user = await addUserToRoom({ roomId, userId });
 
-    let currentUser;
-    user.then((res) => (currentUser = res));
-    console.log(currentUser);
+    console.log(user);
 
-    console.log("user is: ", currentUser);
-
-    if (currentUser.error) {
-      console.log(currentUser.error);
-      return;
-    }
-    const mainUser = await User.findById(currentUser.userId);
-    console.log("currentUser is: ", mainUser);
-    if (!mainUser) {
+    const currentUser = await User.findById(user.userId);
+    console.log("currentUser is: ", currentUser);
+    if (!currentUser) {
       console.log("user doesn't exist");
       return;
     }
-    socket.join(currentUser.roomId);
+    socket.join(user.roomId);
 
-    socket.broadcast.to(currentUser.roomId).emit("message", {
+    socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
-      text: `${mainUser.username} has joined!`,
+      text: `${currentUser.username} has joined!`,
     });
   });
 
@@ -163,10 +155,3 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
-
-// const user = addUserToRoom({
-//   roomId: "6004bdfb67e5e803394a1bc8",
-//   userId: "60049ca79dc3525a289bc56a",
-// });
-
-// user.then((res) => console.log(res));
