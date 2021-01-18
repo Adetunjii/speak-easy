@@ -17,15 +17,16 @@ const addUserToRoom = async ({ roomId, userId }) => {
   }
   let roomUsers = room.users;
   console.log(roomUsers);
-  if (roomUsers.length < 2) {
+  if (roomUsers && roomUsers.length < 2) {
     const isExist = roomUsers.find((elem) => elem.toString() === userId);
+    console.log(isExist);
     if (isExist) {
       return { error: "user already exists" };
     }
     roomUsers.push(userId);
     await room.save();
     const user = { roomId, userId };
-    console.log("usr is: ", user);
+    console.log("user is: ", user);
     return { user };
   }
 
