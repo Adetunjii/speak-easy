@@ -24,11 +24,11 @@ const addUserToRoom = async ({ roomId, userId }) => {
     }
     roomUsers.push(userId);
     await room.save();
+    return userId;
   }
 
   room.isAvailable = false;
   await room.save();
-  return userId;
 };
 
 const addUserToGroup = async ({ groupId, userId }) => {

@@ -60,7 +60,7 @@ io.on("connect", (socket) => {
       return;
     }
     const currentUser = await User.findById(user);
-
+    console.log("currentUser is: ", currentUser);
     if (!currentUser) {
       console.log("user doesn't exist");
       return;
