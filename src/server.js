@@ -74,7 +74,7 @@ io.on("connect", (socket) => {
     });
   });
 
-  socket.on("joinGroup", ({ groupId, userId }, callback) => {
+  socket.on("joinGroup", async ({ groupId, userId }, callback) => {
     const { error, user } = await addUserToGroup({ groupId, userId });
 
     console.log("error is:", error);
@@ -129,7 +129,6 @@ io.on("connect", (socket) => {
   });
 
   socket.on("sendMessageToRoom", ({ roomId, userId, message }, callback) => {
-
     io.to(roomId).emit("message", {
       room: roomId,
       user: userId,
