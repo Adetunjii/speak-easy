@@ -49,14 +49,15 @@ io.on("connect", (socket) => {
 
   console.log("got here");
 
-  socket.on("joinRoom", ({ roomId, userId }, callback) => {
+  socket.on("joinRoom", async ({ roomId, userId }, callback) => {
     const { error, user } = addUserToRoom({ roomId, userId });
 
     console.log("error is:", error);
     console.log("user is: ", user);
 
     if (error) return callback(error);
-    const currentUser = User.findById(user);
+    const currentUser = await User.findById(user);
+
     if (!currentUser) {
       return callback("User doesn't exist");
     }
