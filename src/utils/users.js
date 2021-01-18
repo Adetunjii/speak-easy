@@ -24,7 +24,9 @@ const addUserToRoom = async ({ roomId, userId }) => {
     }
     roomUsers.push(userId);
     await room.save();
-    return userId;
+    const user = { roomId, userId };
+    console.log("usr is: ", user);
+    return { user };
   }
 
   room.isAvailable = false;

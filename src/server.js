@@ -80,13 +80,13 @@ io.on("connect", (socket) => {
     console.log("user is: ", user);
 
     if (error) return callback(error);
-    const currentUser = User.findById(user);
+    const currentUser = User.findById(user.userId);
     if (!currentUser) {
       return callback("User doesn't exist");
     }
     socket.join(groupId);
 
-    socket.broadcast.to(roomId).emit("message", {
+    socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
     });
