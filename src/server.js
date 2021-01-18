@@ -9,6 +9,7 @@ const {
   bookingRouter,
   roomRouter,
   groupRouter,
+  postRouter,
 } = require("./routes");
 const {
   addUser,
@@ -36,6 +37,7 @@ app.use("/api/users", userRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/group", groupRouter);
+app.use("/api/post", postRouter);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
@@ -74,20 +76,25 @@ io.on("connect", (socket) => {
     });
   });
 
-  socket.on("joinGroup", async ({ groupId, userId }, callback) => {
-    const { error, user } = await addUserToGroup({ groupId, userId });
+  socket.on("joinGroup", async ({ groupId, userID }, callback) => {
+    const { error, userId } = await addUserToGroup({ groupId, userID });
 
     console.log("error is:", error);
-    console.log("user is: ", user);
+    console.log("user is: ", userId);
 
     if (error) return callback(error);
-    const currentUser = User.findById(user.userId);
+    const currentUser = User.findById(userId);
     if (!currentUser) {
       return callback("User doesn't exist");
     }
     socket.join(groupId);
 
-    socket.broadcast.to(user.roomId).emit("message", {
+    socket.emit("message", {
+      user: "admin",
+      text: `${user.name}, welcome to room ${user.room}.`,
+    });
+
+    socket.broadcast.to(groupId).emit("message", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
     });

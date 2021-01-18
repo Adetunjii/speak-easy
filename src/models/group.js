@@ -20,6 +20,7 @@ const groupSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
 });
 
 const Group = mongoose.model("Group", groupSchema);
