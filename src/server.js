@@ -50,7 +50,7 @@ io.on("connect", (socket) => {
   console.log("got here");
 
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
-    const { error, user } = addUserToRoom({ roomId, userId });
+    const { error, user } = await addUserToRoom({ roomId, userId });
 
     console.log("error is:", error);
     console.log("user is: ", user);
@@ -59,15 +59,15 @@ io.on("connect", (socket) => {
       console.log(error);
       return;
     }
-    const currentUser = await User.findById(user);
+    const currentUser = await User.findById(user.userId);
     console.log("currentUser is: ", currentUser);
     if (!currentUser) {
       console.log("user doesn't exist");
       return;
     }
-    socket.join(roomId);
+    socket.join(user.roomId);
 
-    socket.broadcast.to(roomId).emit("message", {
+    socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
     });
@@ -160,3 +160,10 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
+
+const user = addUserToRoom({
+  roomId: "6004bdfb67e5e803394a1bc8",
+  userId: "60049ca79dc3525a289bc56a",
+});
+
+user.then((res) => console.log(res));

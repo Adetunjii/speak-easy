@@ -10,28 +10,29 @@ const availableRooms = [];
 const addUserToRoom = async ({ roomId, userId }) => {
   console.log(roomId, userId);
   const room = await Room.findById(roomId);
-  console.log(room);
   if (!room) {
     console.log("room cannot be found");
     return { error: "Room cannot be found" };
   }
   let roomUsers = room.users;
-  console.log(roomUsers);
   if (roomUsers && roomUsers.length < 2) {
-    const isExist = roomUsers.find((elem) => elem.toString() === userId);
+    const isExist = roomUsers.includes(userId);
     console.log(isExist);
     if (isExist) {
       return { error: "user already exists" };
     }
     roomUsers.push(userId);
     await room.save();
-    const user = { roomId, userId };
+
+    let user = { roomId, userId };
     console.log("user is: ", user);
-    return { user };
+    return { roomId, userId };
   }
 
   room.isAvailable = false;
   await room.save();
+
+  return { error: "couldnt enter room" };
 };
 
 const addUserToGroup = async ({ groupId, userId }) => {
