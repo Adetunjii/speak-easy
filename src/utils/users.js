@@ -28,7 +28,7 @@ const addUserToRoom = async ({ roomId, userId }) => {
 
   room.isAvailable = false;
   await room.save();
-  return userID;
+  return userId;
 };
 
 const addUserToGroup = async ({ groupId, userId }) => {

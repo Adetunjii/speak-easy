@@ -50,16 +50,16 @@ io.on("connect", (socket) => {
   console.log("got here");
 
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
-    const { error, userID } = addUserToRoom({ roomId, userId });
+    const { error, user } = addUserToRoom({ roomId, userId });
 
     console.log("error is:", error);
-    console.log("user is: ", userID);
+    console.log("user is: ", user);
 
     if (error) {
       console.log(error);
       return;
     }
-    const currentUser = await User.findById(userID);
+    const currentUser = await User.findById(user);
 
     if (!currentUser) {
       console.log("user doesn't exist");
