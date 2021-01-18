@@ -75,7 +75,7 @@ io.on("connect", (socket) => {
   });
 
   socket.on("joinGroup", ({ groupId, userId }, callback) => {
-    const { error, user } = addUserToGroup({ groupId, userId });
+    const { error, user } = await addUserToGroup({ groupId, userId });
 
     console.log("error is:", error);
     console.log("user is: ", user);
@@ -129,11 +129,12 @@ io.on("connect", (socket) => {
   });
 
   socket.on("sendMessageToRoom", ({ roomId, userId, message }, callback) => {
+
     io.to(roomId).emit("message", {
+      room: roomId,
       user: userId,
       text: message,
     });
-    callback();
   });
 
   socket.on("disconnect", () => {

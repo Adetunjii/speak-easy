@@ -36,7 +36,7 @@ const addUserToRoom = async ({ roomId, userId }) => {
 };
 
 const addUserToGroup = async ({ groupId, userId }) => {
-  const group = await Group.findById(roomId);
+  const group = await Group.findById(groupId);
   console.log(group);
   if (!group) {
     return { error: "Group cannot be found" };
