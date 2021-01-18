@@ -56,7 +56,7 @@ io.on("connect", (socket) => {
     console.log("user is: ", user);
 
     if (error) {
-      console.log("an error occured");
+      console.log(error);
       return;
     }
     const currentUser = await User.findById(user);

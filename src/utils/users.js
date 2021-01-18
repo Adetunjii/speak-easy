@@ -8,6 +8,7 @@ const users = [];
 const availableRooms = [];
 
 const addUserToRoom = async ({ roomId, userId }) => {
+  console.log(roomId, userId);
   const room = await Room.findById(roomId);
   console.log(room);
   if (!room) {
