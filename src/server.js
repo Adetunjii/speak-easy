@@ -52,26 +52,27 @@ io.on("connect", (socket) => {
   socket.on("joinRoom", async ({ roomId, userId }, callback) => {
     const user = addUserToRoom({ roomId, userId });
 
-    console.log(user);
+    let currentUser;
+    user.then((res) => (currentUser = res));
+    console.log(currentUser);
 
-    console.log("error is:", error);
-    console.log("user is: ", user);
+    console.log("user is: ", currentUser);
 
-    if (error) {
-      console.log(error);
+    if (currentUser.error) {
+      console.log(currentUser.error);
       return;
     }
-    const currentUser = await User.findById(user.userId);
-    console.log("currentUser is: ", currentUser);
-    if (!currentUser) {
+    const mainUser = await User.findById(currentUser.userId);
+    console.log("currentUser is: ", mainUser);
+    if (!mainUser) {
       console.log("user doesn't exist");
       return;
     }
-    socket.join(user.roomId);
+    socket.join(currentUser.roomId);
 
-    socket.broadcast.to(user.roomId).emit("message", {
+    socket.broadcast.to(currentUser.roomId).emit("message", {
       user: "admin",
-      text: `${currentUser.username} has joined!`,
+      text: `${mainUser.username} has joined!`,
     });
   });
 
