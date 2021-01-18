@@ -11,7 +11,11 @@ router.post("/createRoom", auth, async (req, res) => {
     console.log(newRoom);
     const room = await newRoom.save();
     console.log(room);
-    res.status(201).send("Successfully created room");
+    res.status(201).send({
+      status: true,
+      message: "successfully created",
+      data: room,
+    });
   } catch (error) {
     res.status(400).send(error);
   }

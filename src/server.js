@@ -156,8 +156,3 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
-
-// addUserToRoom({
-//   roomId: "60033cdb43a8231c6c1e737e",
-//   userId: "5ff46dbf9f78783948965f79",
-// });
