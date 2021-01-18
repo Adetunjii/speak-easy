@@ -128,15 +128,9 @@ io.on("connect", (socket) => {
     // callback();
   });
 
-  socket.on("sendMessage", ({ userData, message }, callback) => {
-    console.log(socket.id);
-    console.log("user ==>", userData);
-    console.log(message);
-    const allUsers = getUsersInRoom(userData.room);
-    console.log("all users: ", allUsers);
-
-    io.to(userData.room).emit("message", {
-      user: userData.name,
+  socket.on("sendMessage", ({ roomId, userId, message }, callback) => {
+    io.to(roomId).emit("message", {
+      user: userId,
       text: message,
       userData: userData,
     });
