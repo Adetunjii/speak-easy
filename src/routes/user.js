@@ -54,6 +54,7 @@ router.patch("/update", auth, async (req, res, next) => {
     "email",
     "phoneNo",
     "password",
+    "imageURL",
   ];
   const isValidOperation = updates.every((update) => {
     return allowedUpdates.includes(update);

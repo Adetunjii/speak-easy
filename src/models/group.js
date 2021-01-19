@@ -8,16 +8,20 @@ const groupSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+  imageURL: String,
+  groupType: { type: String, enum: ["private", "public"], required: true },
   members: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  followers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      userDetails: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+      },
+      memberType: {
+        type: String,
+        required: true,
+        enum: ["admin", "moderators", "users"],
+      },
     },
   ],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],

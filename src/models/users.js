@@ -6,18 +6,17 @@ const { ErrorHandler } = require("../helpers/errors");
 const dotenv = require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
-  firstName: {
+  fullName: {
     type: String,
-    required: [true, "First Name is required"],
+    required: [true, "Full Name is required"],
     trim: true,
     lowercase: true,
     validate(value) {
       if (validator.isEmpty(value)) {
-        throw new ErrorHandler(400, "First name field cannot be empty");
+        throw new ErrorHandler(400, "Full Name field cannot be empty");
       }
     },
   },
-  lastName: { type: String, required: true, trim: true, lowercase: true },
   username: {
     type: String,
     required: true,
@@ -58,6 +57,13 @@ const userSchema = new mongoose.Schema({
     default:
       "https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light",
   },
+  userType: {
+    type: String,
+    enum: ["admin", "doctor", "client"],
+    required: true,
+  },
+  sessionPrice: Number,
+  AvailableTime: [{ type: String }],
   rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
   tokens: [

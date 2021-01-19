@@ -10,6 +10,7 @@ const {
   roomRouter,
   groupRouter,
   postRouter,
+  uploadRouter,
 } = require("./routes");
 const {
   addUser,
@@ -38,6 +39,7 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/post", postRouter);
+app.use("/api/upload", uploadRouter);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
