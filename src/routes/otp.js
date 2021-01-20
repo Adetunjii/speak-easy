@@ -3,18 +3,38 @@ const nodemailer = require("nodemailer");
 const { ErrorHandler } = require("../helpers/errors");
 const OTP = require("../models/otp");
 const dotenv = require("dotenv").config();
+const aws = require("aws-sdk");
+
+const {
+  MAIL_HOST,
+  MAIL_PORT,
+  MAIL_USER,
+  MAIL_PASSWORD,
+  ACCESS_KEY_ID,
+  SECRET_KEY_ID,
+} = process.env;
+
+aws.config.update({
+  accessKeyId: ACCESS_KEY_ID,
+  secretAccessKey: SECRET_KEY_ID,
+  region: "us-east-1",
+});
 
 const router = Router();
-const { MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASSWORD } = process.env;
 
 //create nodemailer transport
 const transport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  auth: {
-    user: "adetunjithomas1@gmail.com",
-    pass: "ebunoluwa",
-  },
+  // service: "gmail",
+  // host: "smtp.gmail.com",
+  // secure: true,
+  // port: 465,
+  // auth: {
+  //   user: "adetunjithomas1@gmail.com",
+  //   pass: "ebunoluwa",
+  // },
+  SES: new aws.SES({
+    apiVersion: "2010-12-01",
+  }),
 });
 
 router.post("/generateAndSendOTP", async (req, res, next) => {
