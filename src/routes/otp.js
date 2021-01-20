@@ -15,8 +15,8 @@ const {
 } = process.env;
 
 aws.config.update({
-  accessKeyId: ACCESS_KEY_ID,
-  secretAccessKey: SECRET_KEY_ID,
+  accessKeyId: "AKIAZGH6NOJQFP3J4ZML",
+  secretAccessKey: "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",
   region: "us-east-1",
 });
 
@@ -24,17 +24,16 @@ const router = Router();
 
 //create nodemailer transport
 const transport = nodemailer.createTransport({
-  // service: "gmail",
-  // host: "smtp.gmail.com",
+  // host: "us-east-1.amazon.com",
   // secure: true,
   // port: 465,
   // auth: {
   //   user: "adetunjithomas1@gmail.com",
   //   pass: "ebunoluwa",
   // },
-  SES: new aws.SES({
-    apiVersion: "2010-12-01",
-  }),
+  // SES: new aws.SES({
+  //   apiVersion: "2010-12-01",
+  // }),
 });
 
 router.post("/generateAndSendOTP", async (req, res, next) => {

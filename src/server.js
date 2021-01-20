@@ -165,3 +165,6 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
+
+const aws = require("aws-sdk");
+aws.config.update({ region: "us-east-1" });
