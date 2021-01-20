@@ -16,6 +16,7 @@ const s3 = new AWS.S3({
 });
 
 const getSignedUrl = (req, res) => {
+  console.log(req.body);
   let fileType = req.body.fileType;
   if (
     fileType != ".jpg" &&
