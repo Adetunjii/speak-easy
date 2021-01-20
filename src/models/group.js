@@ -12,7 +12,7 @@ const groupSchema = new mongoose.Schema({
   groupType: { type: String, enum: ["private", "public"], required: true },
   members: [
     {
-      userDetails: {
+      memberDetails: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "User",

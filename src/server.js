@@ -11,6 +11,7 @@ const {
   groupRouter,
   postRouter,
   uploadRouter,
+  otpRouter,
 } = require("./routes");
 const {
   addUser,
@@ -40,6 +41,7 @@ app.use("/api/room", roomRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/post", postRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/otp", otpRouter);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });

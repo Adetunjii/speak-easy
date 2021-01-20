@@ -19,6 +19,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.8",
+    "nodemailer": "^6.4.17",
+    "shortid": "^2.2.16",
     "socket.io": "^2.3.0",
     "validator": "^13.5.2"
   },

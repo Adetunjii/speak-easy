@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   sessionPrice: Number,
-  AvailableTime: [{ type: String }],
+  availableTime: [{ type: String }],
   rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
   tokens: [

@@ -5,6 +5,7 @@ const roomRouter = require("./room");
 const groupRouter = require("./group");
 const postRouter = require("./post");
 const uploadRouter = require("./upload");
+const otpRouter = require("./otp");
 
 module.exports = {
   userRouter,
@@ -14,4 +15,5 @@ module.exports = {
   groupRouter,
   postRouter,
   uploadRouter,
+  otpRouter,
 };
