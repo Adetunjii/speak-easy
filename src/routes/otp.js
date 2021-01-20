@@ -9,11 +9,11 @@ const { MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASSWORD } = process.env;
 
 //create nodemailer transport
 const transport = nodemailer.createTransport({
-  host: "smtp-mail.outlook.com",
+  host: "smtp.office365.com",
   port: 587,
   auth: {
-    user: "adetunjithomas1@gmail.com",
-    pass: "ebunoluwa",
+    user: "adetunjithomas1@outlook.com",
+    pass: "Dolabomi",
   },
 });
 
