@@ -18,11 +18,15 @@ const s3 = new AWS.S3({
 const getSignedUrl = (req, res) => {
   let fileType = req.body.fileType;
   if (
-    (fileType != ".jpg" && fileType != ".png" && fileType != ".jpeg") ||
-    fileType != ".pdf" ||
+    fileType != ".jpg" &&
+    fileType != ".png" &&
+    fileType != ".jpeg" &&
+    fileType != ".pdf" &&
     fileType != ".docx"
   ) {
-    return res(403).send({ status: false, message: "Invalid file format" });
+    return res
+      .status(404)
+      .send({ status: false, message: "Invalid file format" });
   }
 
   fileType = fileType.substring(1, fileType.length);
@@ -36,7 +40,7 @@ const getSignedUrl = (req, res) => {
   s3.getSignedUrl("putObject", params, (err, data) => {
     if (err) {
       console.log(err);
-      return res.send();
+      return;
     }
 
     const returnData = {
