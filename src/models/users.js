@@ -5,76 +5,81 @@ const validator = require("validator");
 const { ErrorHandler } = require("../helpers/errors");
 const dotenv = require("dotenv").config();
 
-const userSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: [true, "Full Name is required"],
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new ErrorHandler(400, "Full Name field cannot be empty");
-      }
-    },
-  },
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new Error("Field cannot be empty");
-      }
-    },
-  },
-  password: { type: String, required: true },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Email is invalid");
-      }
-    },
-  },
-  phoneNo: {
-    type: String,
-    required: true,
-    unique: true,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new Error("Field cannot be empty");
-      }
-    },
-  },
-  imageURL: {
-    type: String,
-    default:
-      "https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light",
-  },
-  userType: {
-    type: String,
-    enum: ["admin", "doctor", "client"],
-    required: true,
-  },
-  sessionPrice: Number,
-  availableTime: [{ type: String }],
-  rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
+const userSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: [true, "Full Name is required"],
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (validator.isEmpty(value)) {
+          throw new ErrorHandler(400, "Full Name field cannot be empty");
+        }
       },
     },
-  ],
-});
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (validator.isEmpty(value)) {
+          throw new Error("Field cannot be empty");
+        }
+      },
+    },
+    password: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email is invalid");
+        }
+      },
+    },
+    phoneNo: {
+      type: String,
+      required: true,
+      unique: true,
+      validate(value) {
+        if (validator.isEmpty(value)) {
+          throw new Error("Field cannot be empty");
+        }
+      },
+    },
+    imageURL: {
+      type: String,
+      default:
+        "https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light",
+    },
+    userType: {
+      type: String,
+      enum: ["admin", "doctor", "client"],
+      required: true,
+    },
+    sessionPrice: Number,
+    availableTime: [{ type: String }],
+    documents: [String],
+    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
+    reviewList: [String],
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 userSchema.methods.toJSON = function () {
   const user = this;

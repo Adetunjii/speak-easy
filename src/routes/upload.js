@@ -17,7 +17,11 @@ const s3 = new AWS.S3({
 
 const getSignedUrl = (req, res) => {
   let fileType = req.body.fileType;
-  if (fileType != ".jpg" && fileType != ".png" && fileType != ".jpeg") {
+  if (
+    (fileType != ".jpg" && fileType != ".png" && fileType != ".jpeg") ||
+    fileType != ".pdf" ||
+    fileType != ".docx"
+  ) {
     return res(403).send({ status: false, message: "Invalid file format" });
   }
 
