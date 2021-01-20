@@ -52,7 +52,7 @@ router.post("/generateAndSendOTP", async (req, res, next) => {
     }
 
     const mailOptions = {
-      from: "adetunjithomas1@outlook.com",
+      from: "g2createapps@gmail.com",
       to: userEmail,
       subject: "SPEAK EASY EMAIL VERIFICATION",
       html: `
