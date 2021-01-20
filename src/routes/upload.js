@@ -35,7 +35,6 @@ const getSignedUrl = (req, res) => {
   const params = {
     Bucket: BUCKET_NAME,
     Key: fileName + "." + fileType,
-    ACL: "public-read",
   };
 
   s3.getSignedUrl("putObject", params, (err, data) => {
