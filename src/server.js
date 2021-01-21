@@ -12,6 +12,7 @@ const {
   postRouter,
   uploadRouter,
   otpRouter,
+  commentRouter,
 } = require("./routes");
 const {
   addUser,
@@ -40,6 +41,7 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/post", postRouter);
+app.use("/api/post/comment", commentRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/otp", otpRouter);
 app.use((err, req, res, next) => {
@@ -165,6 +167,3 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
-
-const aws = require("aws-sdk");
-aws.config.update({ region: "us-east-1" });

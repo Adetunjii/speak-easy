@@ -6,6 +6,7 @@ const groupRouter = require("./group");
 const postRouter = require("./post");
 const uploadRouter = require("./upload");
 const otpRouter = require("./otp");
+const commentRouter = require("./postComment");
 
 module.exports = {
   userRouter,
@@ -16,4 +17,5 @@ module.exports = {
   postRouter,
   uploadRouter,
   otpRouter,
+  commentRouter,
 };

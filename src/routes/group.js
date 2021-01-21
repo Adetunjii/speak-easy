@@ -22,6 +22,7 @@ router.post("/joinGroup", auth, async (req, res, next) => {
   try {
     const groupId = req.body.groupId;
     const userId = req.body.userId;
+    const memberType = req.body.memberType;
 
     const group = await Group.findById(groupId);
     if (!group) {
@@ -29,11 +30,16 @@ router.post("/joinGroup", auth, async (req, res, next) => {
     }
 
     const groupMembers = group.members;
-    const isGroupMember = groupMembers.find((member) => member === userId);
+    const isGroupMember = groupMembers.find(
+      (member) => member.memberDetails === userId
+    );
     if (isGroupMember) {
       throw new ErrorHandler(400, "User is already a member");
     }
-    group.members.push(userId);
+    group.members.push({
+      memberDetails: userId,
+      memberType,
+    });
     const joinedGroup = await group.save();
 
     //update user
