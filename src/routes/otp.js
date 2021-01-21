@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const nodemailer = require("nodemailer");
+const sesTransport = require("nodemailer-ses-transport");
 const { ErrorHandler } = require("../helpers/errors");
 const OTP = require("../models/otp");
 const dotenv = require("dotenv").config();
@@ -12,6 +13,8 @@ const {
   MAIL_PASSWORD,
   ACCESS_KEY_ID,
   SECRET_KEY_ID,
+  ses_access_key,
+  ses_secret_key,
 } = process.env;
 
 aws.config.update({
@@ -23,18 +26,24 @@ aws.config.update({
 const router = Router();
 
 //create nodemailer transport
-const transport = nodemailer.createTransport({
-  // host: "us-east-1.amazon.com",
-  // secure: true,
-  // port: 465,
-  // auth: {
-  //   user: "adetunjithomas1@gmail.com",
-  //   pass: "ebunoluwa",
-  // },
-  // SES: new aws.SES({
-  //   apiVersion: "2010-12-01",
-  // }),
-});
+const transport = nodemailer.createTransport(
+  sesTransport({
+    // host: "us-east-1.amazon.com",
+    // secure: true,
+    // port: 465,
+    // auth: {
+    //   user: "adetunjithomas1@gmail.com",
+    //   pass: "ebunoluwa",
+    // },
+    // SES: new aws.SES({
+    //   apiVersion: "2010-12-01",
+    // }),
+
+    accessKeyId: ses_access_key,
+    secretAccessKey: ses_secret_key,
+    region: "us-east-1",
+  })
+);
 
 router.post("/generateAndSendOTP", async (req, res, next) => {
   //generate a random otp from 0000 - 9999;
@@ -64,6 +73,7 @@ router.post("/generateAndSendOTP", async (req, res, next) => {
       if (err) {
         console.log(err);
       }
+      console.log("response is: ", info);
     });
 
     const isExist = await OTP.findOne({ userEmail: userEmail });
