@@ -22,6 +22,24 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get("/:userId", auth, async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    if (!userId) {
+      throw new ErrorHandler(400, "Invalid user id");
+    }
+    const user = await User.findById(userId);
+    res.status(200).send({
+      status: true,
+      message: "fetched successfully...",
+      data: user,
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/signup", async (req, res, next) => {
   try {
     const user = new User(req.body);
