@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Full Name is required"],
       trim: true,
-      lowercase: true,
       validate(value) {
         if (validator.isEmpty(value)) {
           throw new ErrorHandler(400, "Full Name field cannot be empty");

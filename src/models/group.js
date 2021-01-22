@@ -6,7 +6,6 @@ const groupSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    lowercase: true,
   },
   imageURL: String,
   groupType: { type: String, enum: ["private", "public"], required: true },
