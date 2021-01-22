@@ -3,6 +3,7 @@ const auth = require("../middleware/auth");
 const User = require("../models/users");
 const Post = require("../models/posts");
 const PostComment = require("../models/PostComment");
+const { ErrorHandler } = require("../helpers/errors");
 const router = Router();
 
 router.post("/:postId", auth, async (req, res, next) => {
@@ -15,14 +16,20 @@ router.post("/:postId", auth, async (req, res, next) => {
       throw new Error(404, "Invalid request body");
     }
 
-    //create a new comment
-    const comment = new PostComment(req.body);
-
     //check if the user exists
     const user = await User.findById(userId);
     if (!user) {
       throw new ErrorHandler(404, "User doesn't exist");
     }
+
+    const newPostComment = {
+      text: req.body.text,
+      postId: req.params.postId,
+      userId: req.body.userId,
+    };
+
+    //create a new comment
+    const comment = new PostComment(newPostComment);
 
     //find particular post by id
     const post = await Post.findById(postId);
@@ -42,6 +49,22 @@ router.post("/:postId", auth, async (req, res, next) => {
       message: "Posted comment successfully",
       data: comment,
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/getComment/:commentId", auth, async (req, res, next) => {
+  try {
+    const commentId = req.params.commentId;
+    const comment = await PostComment.findById(commentId);
+
+    res.status(200).send({
+      status: true,
+      message: "fetched comment successfully",
+      comment,
+    });
+    next();
   } catch (error) {
     next(error);
   }

@@ -20,9 +20,7 @@ router.post("/createGroup", auth, async (req, res, next) => {
 
 router.post("/joinGroup", auth, async (req, res, next) => {
   try {
-    const groupId = req.body.groupId;
-    const userId = req.body.userId;
-    const memberType = req.body.memberType;
+    const { groupId, userId, memberType } = req.body;
 
     const group = await Group.findById(groupId);
     if (!group) {
@@ -76,7 +74,7 @@ router.get("/getUserGroups/:userId", auth, async (req, res, next) => {
     if (!user) {
       throw new ErrorHandler(404, "User doesn't exist");
     }
-    await user.populate("groups");
+
     const userGroups = user.groups;
     res.status(200).send({
       status: true,
