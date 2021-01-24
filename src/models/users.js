@@ -70,6 +70,7 @@ const userSchema = new mongoose.Schema(
     reviewList: [String],
     longitude: {type: String},
     latitude: {type: String},
+    address: {type: String},
     tokens: [
       {
         token: {
