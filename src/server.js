@@ -76,7 +76,11 @@ io.on("connect", (socket) => {
       text: `${user.name}, welcome to room ${user.room}.`,
     });
 
-    socket.broadcast.to(user.roomId).emit("message", {
+    socket.emit("userData", {
+      user: user.userId
+    })
+
+    socket.broadcast.to(user.roomId).emit("adminMessage", {
       user: "admin",
       text: `${currentUser.username} has joined!`,
     });
