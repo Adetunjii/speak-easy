@@ -22,6 +22,21 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get('/getAll', auth, async(req, res, next) => {
+  try {
+    const users = await User.find({});
+    
+    res.status(200).send({
+      status: true,
+      message: "Successfully fetched...",
+      data: users
+    })
+  }catch(error) {
+    next(error)
+  }
+})
+
+
 router.get("/:userId", auth, async (req, res, next) => {
   try {
     const userId = req.params.userId;
@@ -40,6 +55,7 @@ router.get("/:userId", auth, async (req, res, next) => {
   }
 });
 
+
 router.post("/signup", async (req, res, next) => {
   try {
     const user = new User(req.body);
@@ -53,15 +69,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.get("/getAllUsers", async (req, res, next) => {
-  try {
-    const users = await User.find({});
-    res.status(200).send(users);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+
 
 router.patch("/update", auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
@@ -99,6 +107,7 @@ router.patch("/update", auth, async (req, res, next) => {
   }
 });
 
+
 router.delete("/delete", auth, async (req, res) => {
   try {
     await req.user.remove();
@@ -109,5 +118,6 @@ router.delete("/delete", auth, async (req, res) => {
     next(error);
   }
 });
+
 
 module.exports = router;

@@ -93,7 +93,7 @@ router.post("/generateAndSendOTP", async (req, res, next) => {
     await newOtp.save();
     res.status(201).send({
       status: true,
-      message: "otp saved successfully",
+      message: "otp sent successfully",
     });
     next();
   } catch (error) {
