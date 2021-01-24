@@ -76,9 +76,7 @@ io.on("connect", (socket) => {
       text: `${user.name}, welcome to room ${user.room}.`,
     });
 
-    socket.emit("userData", {
-      user: user.userId
-    })
+
 
     socket.broadcast.to(user.roomId).emit("adminMessage", {
       user: "admin",

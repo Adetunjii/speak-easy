@@ -36,6 +36,29 @@ router.get("/waitingList", auth, async (req, res, next) => {
   }
 });
 
+router.get('/getUsersInRoom/:roomId', async(req, res, next) => {
+  try {
+    const roomId = req.params.roomId;
+    
+    if(!roomId) {
+      throw new ErrorHandler(400, "Invalid room id")
+    }
+
+    const users = await Room.findById(roomId).select('users').populate('users');
+
+    res.status(200).send({
+      status: true,
+      message: "successfully fetched...",
+      data: users
+    })
+
+  }
+  catch(error){
+    next(error);
+
+  }
+})
+
 router.get("/getAllRooms", auth, async (req, res, next) => {
   try {
     const rooms = await Room.find({}).populate("users");

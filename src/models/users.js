@@ -68,6 +68,8 @@ const userSchema = new mongoose.Schema(
     rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
     groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
     reviewList: [String],
+    longitude: {type: String},
+    latitude: {type: String},
     tokens: [
       {
         token: {
