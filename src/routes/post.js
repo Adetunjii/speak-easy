@@ -76,6 +76,44 @@ router.get("/getPosts/:groupId", auth, async (req, res, next) => {
   }
 });
 
+router.patch("/update/:postId", auth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  const postId = req.params.postId;
+  const allowedUpdates = [
+    "text",
+    "imageURL",
+  ];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  try {
+    if (!isValidOperation) {
+      throw new ErrorHandler(400, "invalid update");
+    }
+
+    const post = await Room.findById(postId);
+
+    if(!post) {
+      throw new ErrorHandler(404, "Post not found");
+    }
+
+    updates.forEach((update) => (post[update] = req.body[update]));
+
+  
+    await post.save();
+    res.status(200).send({
+      status: true,
+      message: "successfully updated",
+      data: post
+    })
+    next();
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
+});
+
 router.delete("/deletePost/:groupId/:userId", auth, async (req, res, next) => {
   try {
     const groupId = req.params.groupId;

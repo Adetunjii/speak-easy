@@ -71,6 +71,45 @@ router.get("/getAllRooms", auth, async (req, res, next) => {
   }
 });
 
+router.patch("/update/:roomId", auth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  const roomId = req.params.roomId;
+  const allowedUpdates = [
+    "roomName",
+    "users",
+    "isAvailable",
+  ];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  try {
+    if (!isValidOperation) {
+      throw new ErrorHandler(400, "invalid update");
+    }
+
+    const room = await Room.findById(roomId);
+
+    if(!room) {
+      throw new ErrorHandler(404, "Room not found");
+    }
+
+    updates.forEach((update) => (room[update] = req.body[update]));
+
+  
+    await room.save();
+    res.status(200).send({
+      status: true,
+      message: "successfully updated",
+      data: room
+    })
+    next();
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
+});
+
 router.delete("/deleteRoom/:id", auth, async (req, res, next) => {
   const roomId = req.params.id;
   try {

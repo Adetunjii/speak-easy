@@ -115,6 +115,46 @@ router.get("/getGroupById/:groupId", auth, async (req, res, next) => {
   }
 });
 
+
+router.patch("/update/:groupId", auth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  const groupId = req.params.groupId;
+  const allowedUpdates = [
+    "groupName",
+    "groupType",
+  ];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  try {
+    if (!isValidOperation) {
+      throw new ErrorHandler(400, "invalid update");
+    }
+
+    const group = await Room.findById(groupId);
+
+    if(!room) {
+      throw new ErrorHandler(404, "Group not found");
+    }
+
+    updates.forEach((update) => (group[update] = req.body[update]));
+
+  
+    await group.save();
+    res.status(200).send({
+      status: true,
+      message: "successfully updated",
+      data: group
+    })
+    next();
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
+});
+
+
 router.delete("/deleteGroup/:id", auth, async (req, res) => {
   try {
     const groupId = req.params.id;

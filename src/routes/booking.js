@@ -61,4 +61,69 @@ router.get("/getBooking/doctor/:id", auth, async (req, res) => {
   }
 });
 
+router.patch("/updateBooking/:bookingId", auth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  const bookingId = req.params.bookingId;
+  const allowedUpdates = [
+    "userID",
+    "doctorID",
+    "amount",
+    "status",
+    "date",
+    "paymentReference",
+    "paymentStatus"
+  ];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  try {
+    if (!isValidOperation) {
+      throw new ErrorHandler(400, "invalid update");
+    }
+
+    const booking = await Booking.findById(bookingId);
+
+    if(!booking) {
+      throw new ErrorHandler(404, "Booking not found");
+    }
+
+    updates.forEach((update) => (booking[update] = req.body[update]));
+
+  
+    await booking.save();
+    res.status(200).send({
+      status: true,
+      message: "successfully updated",
+      data: booking
+    })
+    next();
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
+});
+
+
+router.delete("/deleteBooking/:bookingId", auth, async (req, res, next) => {
+  const bookingId = req.params.bookingId;
+  try {
+    const booking = Room.findOneAndDelete({ _id: bookingId });
+    if (!booking) {
+      throw new ErrorHandler(404, "Booking doesn't exist");
+    }
+
+    res.status(200).send({
+      status: true,
+      message: 'Successfully deleted',
+      data: booking
+    });
+    next();
+  } catch (error) {
+    error.statusCode = 404;
+    next(error);
+  }
+});
+
+
 module.exports = router;
