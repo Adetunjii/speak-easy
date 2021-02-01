@@ -76,7 +76,7 @@ router.get("/getPosts/:groupId", auth, async (req, res, next) => {
   }
 });
 
-router.patch("/update/:postId", auth, async (req, res, next) => {
+router.patch("/updatePost/:postId", auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
   const postId = req.params.postId;
   const allowedUpdates = [
