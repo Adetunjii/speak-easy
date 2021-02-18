@@ -13,6 +13,8 @@ const {
   uploadRouter,
   otpRouter,
   commentRouter,
+  bookRouter,
+  songRouter,
 } = require("./routes");
 const {
   addUser,
@@ -44,6 +46,8 @@ app.use("/api/post", postRouter);
 app.use("/api/post/comment", commentRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/otp", otpRouter);
+app.use("/api/song", songRouter);
+app.use("/api/book", bookRouter);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
@@ -75,8 +79,6 @@ io.on("connect", (socket) => {
       user: "admin",
       text: `${user.name}, welcome to room ${user.room}.`,
     });
-
-
 
     socket.broadcast.to(user.roomId).emit("adminMessage", {
       user: "admin",
@@ -169,5 +171,3 @@ io.on("connect", (socket) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
-
-

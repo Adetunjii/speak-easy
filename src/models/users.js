@@ -68,9 +68,9 @@ const userSchema = new mongoose.Schema(
     rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
     groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
     reviewList: [String],
-    longitude: {type: String},
-    latitude: {type: String},
-    address: {type: String},
+    longitude: { type: String },
+    latitude: { type: String },
+    address: { type: String },
     tokens: [
       {
         token: {
@@ -89,6 +89,7 @@ userSchema.methods.toJSON = function () {
 
   delete userObject.password;
   delete userObject.tokens;
+  console.log(userObject);
 
   return userObject;
 };
@@ -104,8 +105,6 @@ userSchema.methods.generateAuthToken = async function () {
   await user.save();
   return token;
 };
-
-
 
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
