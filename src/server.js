@@ -15,6 +15,8 @@ const {
   commentRouter,
   bookRouter,
   songRouter,
+  userMoodRouter,
+  mediaRouter,
 } = require("./routes");
 const {
   addUser,
@@ -48,6 +50,8 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/otp", otpRouter);
 app.use("/api/song", songRouter);
 app.use("/api/book", bookRouter);
+app.use("/api/userMood", userMoodRouter);
+app.use("/api/media", mediaRouter);
 app.use((err, req, res, next) => {
   handleError(err, res);
 });

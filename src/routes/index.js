@@ -9,6 +9,8 @@ const otpRouter = require("./otp");
 const commentRouter = require("./postComment");
 const bookRouter = require("./book");
 const songRouter = require("./song");
+const mediaRouter = require("./media");
+const userMoodRouter = require("./userMood");
 
 module.exports = {
   userRouter,
@@ -22,4 +24,6 @@ module.exports = {
   commentRouter,
   bookRouter,
   songRouter,
+  mediaRouter,
+  userMoodRouter,
 };
